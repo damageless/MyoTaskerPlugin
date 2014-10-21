@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Myo Tasker Plugin</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_edit">Add Myo Gesture</string>
+    <string name="done">Done</string>
+    <string name="fist">Fist</string>
+    <string name="thumb_to_pinky">Thumb-to-Pinky</string>
+    <string name="wave_in">Wave In</string>
+    <string name="wave_out">Wave Out</string>
+    <string name="fingers_spread">Fingers Spread</string>
+    <string name="must_select_pose">You must select a pose!</string>
+
+</resources>

@@ -1,0 +1,4 @@
+include ':app'
+
+include ':locale-api'
+project (':locale-api').projectDir = new File('locale-api')

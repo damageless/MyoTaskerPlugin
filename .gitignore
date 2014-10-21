@@ -1,0 +1,14 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+.idea
+prod.jks
+feature_graphic.png
+full_transparent_icon.png
+app-release.apk
+locale-api/build
+*.iml
+device*.png
