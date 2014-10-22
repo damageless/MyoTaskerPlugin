@@ -1,20 +1,23 @@
 package com.damageddev.myotaskerplugin;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.support.v7.app.ActionBarActivity;
 
-import com.damageddev.myotaskerplugin.utils.Constants;
+import com.damageddev.myotaskerplugin.fragments.SettingsFragment;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getPreferenceManager().setSharedPreferencesName(Constants.SHARED_PREFERENCES_NAME);
-        getPreferenceManager().setSharedPreferencesMode(Context.MODE_MULTI_PROCESS);
+        setContentView(R.layout.activity_settings);
 
-        addPreferencesFromResource(R.xml.settings);
+        SettingsFragment settingsFragment = SettingsFragment.newInstance();
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, settingsFragment)
+                .commit();
+
     }
 }
