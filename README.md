@@ -24,7 +24,7 @@ This plugin requires the Tasker app to function. There is no launcher icon; it r
 License
 ----
 
-Myo Tasker Plugin code is under the MIT license. All third-party libraries, code and imagse retain their respective licenses.
+Myo Tasker Plugin code is under the MIT license. All third-party libraries, code and images retain their respective licenses.
 
 The MIT License (MIT)
 
