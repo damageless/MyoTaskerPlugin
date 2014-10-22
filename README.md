@@ -9,7 +9,9 @@ Automate your phone using your Myo armband
 Version
 ----
 
-1.0 - initial release
+1.0.1 - Fixed crash when no pose was selected, added 'done' button
+
+1.0 - Initial release
 
 Installation
 --------------
