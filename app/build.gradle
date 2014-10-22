@@ -8,8 +8,8 @@ android {
         applicationId "com.damageddev.myotaskerplugin"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
     }
     buildTypes {
         release {
@@ -28,8 +28,9 @@ dependencies {
             url '/Users/agessel/myo-android-sdk-0.6.0/myorepository'
         }
 
-        compile ('com.thalmic:myosdk:0.6.+@aar')
+        compile('com.thalmic:myosdk:0.6.+@aar')
         compile "com.android.support:appcompat-v7:21.0.0"
         compile 'com.android.support:recyclerview-v7:+'
     }
+    compile 'com.android.support:support-v4:21.0.0'
 }
