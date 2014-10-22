@@ -14,12 +14,16 @@ package com.damageddev.myotaskerplugin.services;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.damageddev.myotaskerplugin.EditActivity;
+import com.damageddev.myotaskerplugin.R;
 import com.damageddev.myotaskerplugin.utils.Constants;
 import com.damageddev.myotaskerplugin.utils.TaskerPlugin;
 import com.thalmic.myo.AbstractDeviceListener;
@@ -35,19 +39,22 @@ public final class BackgroundService extends Service {
                     .putExtra(com.twofortyfouram.locale.Intent.EXTRA_ACTIVITY,
                             EditActivity.class.getName());
 
-
-    private BroadcastReceiver mReceiver;
     private Toast mToast;
+    private SharedPreferences mDefaultPreferences;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mDefaultPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
+
         Hub hub = Hub.getInstance();
         if (!hub.init(this, getPackageName())) {
             stopSelf();
             return;
         }
+
         hub.addListener(mListener);
         hub.pairWithAnyMyo();
     }
@@ -55,7 +62,7 @@ public final class BackgroundService extends Service {
     private DeviceListener mListener = new AbstractDeviceListener() {
         @Override
         public void onConnect(Myo myo, long timestamp) {
-            showToast("My connected.");
+            showToast(getString(R.string.myo_connected));
         }
 
         @Override
@@ -69,7 +76,10 @@ public final class BackgroundService extends Service {
 
             TaskerPlugin.Event.addPassThroughData(INTENT_REQUEST_REQUERY, bundle);
             BackgroundService.this.sendBroadcast(INTENT_REQUEST_REQUERY);
-            showToast(pose.toString());
+
+            if (mDefaultPreferences.getBoolean("show_toasts", true)) {
+                showToast(pose.toString());
+            }
         }
     };
 
@@ -83,14 +93,6 @@ public final class BackgroundService extends Service {
     @Override
     public IBinder onBind(final Intent arg0) {
         return null;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        unregisterReceiver(mReceiver);
-        mReceiver = null;
     }
 
     private void showToast(String text) {

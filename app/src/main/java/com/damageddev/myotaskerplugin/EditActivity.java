@@ -59,6 +59,8 @@ public class EditActivity extends ActionBarActivity {
                 if (menuItem.getItemId() == R.id.action_done) {
                     onBackPressed();
                     return true;
+                } else if (menuItem.getItemId() == R.id.action_settings) {
+                    startActivity(new Intent(EditActivity.this, SettingsActivity.class));
                 }
 
                 return false;
@@ -130,8 +132,6 @@ public class EditActivity extends ActionBarActivity {
 
     @Override
     public void finish() {
-
-
         Intent resultIntent = new Intent();
 
         Bundle result = new Bundle();

@@ -5,4 +5,5 @@ package com.damageddev.myotaskerplugin.utils;
  */
 public class Constants {
     public static final String POSE = "pose";
+    public static final String SHARED_PREFERENCES_NAME = "com.damageddev.myotaskerplugin.preferences";
 }

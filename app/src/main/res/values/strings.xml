@@ -10,4 +10,8 @@
     <string name="wave_out">Wave Out</string>
     <string name="fingers_spread">Fingers Spread</string>
     <string name="must_select_pose">You must select a pose!</string>
+    <string name="settings">Settings</string>
+    <string name="show_toasts_summary">Disable this option to prevent Toasts when the Myo detects a new gesture</string>
+    <string name="show_toasts">Show Gesture Toasts</string>
+    <string name="myo_connected">Myo connected</string>
 </resources>

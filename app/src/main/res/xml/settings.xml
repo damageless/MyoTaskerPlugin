@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <CheckBoxPreference
+        android:key="show_toasts"
+        android:summary="@string/show_toasts_summary"
+        android:title="@string/show_toasts"
+        android:checked="true"
+        android:defaultValue="true"
+        />
+</PreferenceScreen>

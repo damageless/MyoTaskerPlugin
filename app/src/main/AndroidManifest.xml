@@ -25,20 +25,24 @@
         </activity>
 
         <receiver
-            android:name=".receivers.QueryReceiver"
+            android:name="com.damageddev.myotaskerplugin.receivers.QueryReceiver"
             android:exported="true"
             android:process=":background"
             tools:ignore="ExportedReceiver" >
-
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".services.BackgroundService"
+            android:name="com.damageddev.myotaskerplugin.services.BackgroundService"
             android:exported="false"
             android:process=":background" />
+
+        <activity
+            android:name="com.damageddev.myotaskerplugin.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>
