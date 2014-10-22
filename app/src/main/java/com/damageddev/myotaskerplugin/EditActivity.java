@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -38,6 +40,8 @@ public class EditActivity extends ActionBarActivity {
         mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu_edit);
+
         setSupportActionBar(toolbar);
 
         startService(new Intent(this, BackgroundService.class));
@@ -48,6 +52,24 @@ public class EditActivity extends ActionBarActivity {
                 mSelectedGesture = Gesture.values()[position];
             }
         });
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_done) {
+                    onBackPressed();
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        return true;
     }
 
     private class GestureListAdapter extends BaseAdapter {
@@ -97,10 +119,18 @@ public class EditActivity extends ActionBarActivity {
     }
 
     @Override
-    public void finish() {
-        if (mSelectedGesture == null && mSelectedGesture.getPose() != null) {
+    public void onBackPressed() {
+        if (mSelectedGesture == null) {
             Toast.makeText(this, getString(R.string.must_select_pose), Toast.LENGTH_LONG).show();
+            return;
         }
+
+        finish();
+    }
+
+    @Override
+    public void finish() {
+
 
         Intent resultIntent = new Intent();
 
