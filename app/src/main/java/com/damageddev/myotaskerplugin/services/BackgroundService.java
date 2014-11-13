@@ -41,7 +41,7 @@ public final class BackgroundService extends Service {
 
     private Toast mToast;
     private SharedPreferences mDefaultPreferences;
-
+    private Hub mHub;
 
     @Override
     public void onCreate() {
@@ -49,14 +49,7 @@ public final class BackgroundService extends Service {
 
         mDefaultPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
 
-        Hub hub = Hub.getInstance();
-        if (!hub.init(this, getPackageName())) {
-            stopSelf();
-            return;
-        }
-
-        hub.addListener(mListener);
-        hub.pairWithAnyMyo();
+        mHub = Hub.getInstance();
     }
 
     private DeviceListener mListener = new AbstractDeviceListener() {
@@ -67,6 +60,7 @@ public final class BackgroundService extends Service {
 
         @Override
         public void onDisconnect(Myo myo, long timestamp) {
+            mHub.pairWithAnyMyo();
         }
 
         @Override
@@ -85,7 +79,12 @@ public final class BackgroundService extends Service {
 
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
-        super.onStartCommand(intent, flags, startId);
+        if (!mHub.init(this, getPackageName())) {
+            stopSelf();
+        }
+
+        mHub.addListener(mListener);
+        mHub.pairWithAnyMyo();
 
         return START_STICKY;
     }

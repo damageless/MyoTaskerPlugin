@@ -14,4 +14,5 @@
     <string name="show_toasts_summary">Disable this option to prevent Toasts when the Myo detects a new gesture</string>
     <string name="show_toasts">Show Gesture Toasts</string>
     <string name="myo_connected">Myo connected</string>
+    <string name="connect_to_myo">Connect to Myo</string>
 </resources>
