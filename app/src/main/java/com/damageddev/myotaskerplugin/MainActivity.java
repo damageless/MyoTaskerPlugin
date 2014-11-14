@@ -22,9 +22,7 @@ public class MainActivity extends FragmentActivity {
         findViewById(R.id.connect_to_myo_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Hub.getInstance().getConnectedDevices();
-                Intent intent = new Intent(MainActivity.this, ScanActivity.class);
-                startActivity(intent);
+                startService(new Intent(MainActivity.this, BackgroundService.class));
             }
         });
 
