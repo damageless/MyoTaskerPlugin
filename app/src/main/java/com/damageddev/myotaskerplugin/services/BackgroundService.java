@@ -34,6 +34,8 @@ import com.thalmic.myo.Pose;
 
 
 public final class BackgroundService extends Service {
+    public static final long DEFAULT_UNLOCK_TIME_MILLIS = 5000l;
+
     protected static final Intent INTENT_REQUEST_REQUERY =
             new Intent(com.twofortyfouram.locale.Intent.ACTION_REQUEST_QUERY)
                     .putExtra(com.twofortyfouram.locale.Intent.EXTRA_ACTIVITY,
@@ -42,6 +44,8 @@ public final class BackgroundService extends Service {
     private Toast mToast;
     private SharedPreferences mDefaultPreferences;
     private Hub mHub;
+
+    private long mLastUnlockTime = 0;
 
     @Override
     public void onCreate() {
@@ -68,8 +72,19 @@ public final class BackgroundService extends Service {
             Bundle bundle = new Bundle();
             bundle.putString(Constants.POSE, pose.toString());
 
-            TaskerPlugin.Event.addPassThroughData(INTENT_REQUEST_REQUERY, bundle);
-            BackgroundService.this.sendBroadcast(INTENT_REQUEST_REQUERY);
+            boolean isUnlocked = (mLastUnlockTime + DEFAULT_UNLOCK_TIME_MILLIS) > timestamp;
+
+            if (pose == Pose.THUMB_TO_PINKY && !isUnlocked) {
+                mLastUnlockTime = timestamp;
+                myo.vibrate(Myo.VibrationType.MEDIUM);
+            }
+
+            if (isUnlocked) {
+                TaskerPlugin.Event.addPassThroughData(INTENT_REQUEST_REQUERY, bundle);
+                BackgroundService.this.sendBroadcast(INTENT_REQUEST_REQUERY);
+                myo.vibrate(Myo.VibrationType.SHORT);
+                mLastUnlockTime = timestamp;
+            }
 
             if (mDefaultPreferences.getBoolean("show_toasts", true)) {
                 showToast(pose.toString());
