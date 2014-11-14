@@ -9,6 +9,8 @@ Automate your phone using your Myo armband
 Version
 ----
 
+1.0.3 - Service now restarts on boot and tries to connect to any Myo. Added simple support for an unlock gesture (not currently configurable).
+
 1.0.2 - Fixed another crash when the service was killed, added initial support for Settings.
 
 1.0.1 - Fixed crash when no pose was selected, added 'done' button
