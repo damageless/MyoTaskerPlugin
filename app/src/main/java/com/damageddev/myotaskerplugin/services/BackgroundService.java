@@ -98,6 +98,7 @@ public final class BackgroundService extends Service {
             stopSelf();
         }
 
+        mHub.removeListener(mListener);
         mHub.addListener(mListener);
         mHub.pairWithAnyMyo();
 
