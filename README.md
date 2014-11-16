@@ -9,6 +9,8 @@ Automate your phone using your Myo armband
 Version
 ----
 
+1.1 - Fixed Settings to work without service restarting, added relock time setting, added notification for showing Myo status. Updated Myo SDK to 0.8 (requires 1.0.3 firmware on Myo).
+
 1.0.3 - Service now restarts on boot and tries to connect to any Myo. Added simple support for an unlock gesture (not currently configurable).
 
 1.0.2 - Fixed another crash when the service was killed, added initial support for Settings.
