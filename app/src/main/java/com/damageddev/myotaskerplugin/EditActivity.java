@@ -1,6 +1,8 @@
 package com.damageddev.myotaskerplugin;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -173,5 +175,10 @@ public class EditActivity extends ActionBarActivity {
         int getIconResourceId() {
             return mIconResourceId;
         }
+    }
+
+    @Override
+    public SharedPreferences getSharedPreferences(String name, int mode) {
+        return super.getSharedPreferences(name, Context.MODE_MULTI_PROCESS);
     }
 }

@@ -2,10 +2,25 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ListPreference
+        android:key="relock_time"
+        android:summary="@string/relock_time_summary"
+        android:title="@string/relock_time"
+        android:entries="@array/relock_times"
+        android:entryValues="@array/relock_time_values"
+        android:defaultValue="5"
+        />
     <CheckBoxPreference
         android:key="show_toasts"
         android:summary="@string/show_toasts_summary"
         android:title="@string/show_toasts"
+        android:checked="false"
+        android:defaultValue="false"
+        />
+    <CheckBoxPreference
+        android:key="show_myo_status_notification"
+        android:summary="@string/show_myo_status_notification_summary"
+        android:title="@string/show_myo_status_notification"
         android:checked="true"
         android:defaultValue="true"
         />

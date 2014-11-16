@@ -12,6 +12,7 @@
 
 package com.damageddev.myotaskerplugin.services;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.damageddev.myotaskerplugin.EditActivity;
@@ -27,23 +29,27 @@ import com.damageddev.myotaskerplugin.R;
 import com.damageddev.myotaskerplugin.utils.Constants;
 import com.damageddev.myotaskerplugin.utils.TaskerPlugin;
 import com.thalmic.myo.AbstractDeviceListener;
+import com.thalmic.myo.Arm;
 import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
+import com.thalmic.myo.XDirection;
 
 
 public final class BackgroundService extends Service {
-    public static final long DEFAULT_UNLOCK_TIME_MILLIS = 5000l;
+    public static final int NOTIFICATION_ID = 6592;
 
-    protected static final Intent INTENT_REQUEST_REQUERY =
+    private static final String SHOW_MYO_STATUS_NOTIFICATION = "show_myo_status_notification";
+    private static final Intent INTENT_REQUEST_REQUERY =
             new Intent(com.twofortyfouram.locale.Intent.ACTION_REQUEST_QUERY)
                     .putExtra(com.twofortyfouram.locale.Intent.EXTRA_ACTIVITY,
                             EditActivity.class.getName());
 
     private Toast mToast;
-    private SharedPreferences mDefaultPreferences;
     private Hub mHub;
+
+    private NotificationManager mNotificationManager;
 
     private long mLastUnlockTime = 0;
 
@@ -51,20 +57,44 @@ public final class BackgroundService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        mDefaultPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
-
         mHub = Hub.getInstance();
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
     private DeviceListener mListener = new AbstractDeviceListener() {
         @Override
         public void onConnect(Myo myo, long timestamp) {
             showToast(getString(R.string.myo_connected));
+
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
+
+            if (sharedPreferences.getBoolean(SHOW_MYO_STATUS_NOTIFICATION, true)) {
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(BackgroundService.this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle(getString(R.string.myo_connected))
+                                .setContentText(myo.getName())
+                                .setSubText(myo.getMacAddress())
+                                .setOngoing(true);
+                mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+            }
         }
 
         @Override
         public void onDisconnect(Myo myo, long timestamp) {
-            mHub.pairWithAnyMyo();
+            mHub.attachToAdjacentMyo();
+
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
+
+            if (sharedPreferences.getBoolean(SHOW_MYO_STATUS_NOTIFICATION, true)) {
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(BackgroundService.this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle(getString(R.string.disconnected_from_myo))
+                                .setContentText(getString(R.string.last_connected_to) + " " + myo.getName())
+                                .setOngoing(true);
+                mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+            }
         }
 
         @Override
@@ -72,22 +102,87 @@ public final class BackgroundService extends Service {
             Bundle bundle = new Bundle();
             bundle.putString(Constants.POSE, pose.toString());
 
-            boolean isUnlocked = (mLastUnlockTime + DEFAULT_UNLOCK_TIME_MILLIS) > timestamp;
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
+
+            long unlockTime = Long.valueOf(sharedPreferences.getString("relock_time", "5")) * 1000;
+
+            boolean isUnlocked = (mLastUnlockTime + unlockTime) > timestamp;
 
             if (pose == Pose.THUMB_TO_PINKY && !isUnlocked) {
                 mLastUnlockTime = timestamp;
-                myo.vibrate(Myo.VibrationType.MEDIUM);
+                myo.vibrate(Myo.VibrationType.SHORT);
             }
 
-            if (isUnlocked) {
+            if (isUnlocked && (pose != Pose.REST || pose != Pose.UNKNOWN)) {
                 TaskerPlugin.Event.addPassThroughData(INTENT_REQUEST_REQUERY, bundle);
                 BackgroundService.this.sendBroadcast(INTENT_REQUEST_REQUERY);
-                myo.vibrate(Myo.VibrationType.SHORT);
                 mLastUnlockTime = timestamp;
-            }
 
-            if (mDefaultPreferences.getBoolean("show_toasts", true)) {
-                showToast(pose.toString());
+                if (sharedPreferences.getBoolean("show_toasts", true)) {
+                    showToast(pose.toString());
+                }
+
+                if (sharedPreferences.getBoolean(SHOW_MYO_STATUS_NOTIFICATION, true)) {
+                    NotificationCompat.Builder builder =
+                            new NotificationCompat.Builder(BackgroundService.this)
+                                    .setSmallIcon(R.drawable.ic_launcher)
+                                    .setSubText(myo.getMacAddress())
+                                    .setContentTitle(myo.getName())
+                                    .setContentText(getString(R.string.last_gesture) + " " + pose.toString())
+                                    .setOngoing(true);
+                    mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+                }
+            }
+        }
+
+        @Override
+        public void onAttach(Myo myo, long timestamp) {
+            super.onAttach(myo, timestamp);
+
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
+
+            if (sharedPreferences.getBoolean(SHOW_MYO_STATUS_NOTIFICATION, true)) {
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(BackgroundService.this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle(getString(R.string.myo_attached))
+                                .setContentText(myo.getName())
+                                .setOngoing(true);
+                mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+            }
+        }
+
+        @Override
+        public void onDetach(Myo myo, long timestamp) {
+            super.onDetach(myo, timestamp);
+
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
+
+            if (sharedPreferences.getBoolean(SHOW_MYO_STATUS_NOTIFICATION, true)) {
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(BackgroundService.this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle(getString(R.string.myo_detached))
+                                .setContentText(myo.getName())
+                                .setContentText(getString(R.string.detached_myo) + " " + myo.getName())
+                                .setOngoing(true);
+                mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+            }
+        }
+
+        @Override
+        public void onArmUnsync(Myo myo, long timestamp) {
+            super.onArmUnsync(myo, timestamp);
+
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
+
+            if (sharedPreferences.getBoolean(SHOW_MYO_STATUS_NOTIFICATION, true)) {
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(BackgroundService.this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle(getString(R.string.myo_needs_sync))
+                                .setOngoing(true);
+                mNotificationManager.notify(NOTIFICATION_ID, builder.build());
             }
         }
     };
@@ -100,7 +195,7 @@ public final class BackgroundService extends Service {
 
         mHub.removeListener(mListener);
         mHub.addListener(mListener);
-        mHub.pairWithAnyMyo();
+        mHub.attachToAdjacentMyo();
 
         return START_STICKY;
     }

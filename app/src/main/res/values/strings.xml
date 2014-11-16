@@ -15,4 +15,37 @@
     <string name="show_toasts">Show Gesture Toasts</string>
     <string name="myo_connected">Myo connected</string>
     <string name="connect_to_myo">Connect to Myo</string>
+    <string name="show_myo_status_notification">Myo Status Notification</string>
+    <string name="show_myo_status_notification_summary">If enabled, a notification will be shown at all times that shows the status of the Myo.</string>
+    <string name="disconnected_from_myo">Disconnected from Myo</string>
+    <string name="myo_attached">Myo is attached</string>
+    <string name="myo_detached">Myo is detached</string>
+    <string name="myo_needs_sync">Please perform the setup gesture with the Myo</string>
+    <string name="last_gesture">Last gesture:</string>
+    <string name="relock_time">Relock Time</string>
+    <string name="relock_time_summary">The time that your Myo will detect gestures after the unlock gesture is performed</string>
+    <string name="last_connected_to">Last connected to:</string>
+    <string name="detached_myo">Detached Myo:</string>
+
+    <string-array name="relock_times">
+        <item>1 second</item>
+        <item>2 seconds</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>15 seconds</item>
+        <item>30 seconds</item>
+        <item>45 seconds</item>
+        <item>60 seconds</item>
+    </string-array>
+
+    <string-array name="relock_time_values">
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+    </string-array>
 </resources>

@@ -25,10 +25,10 @@ dependencies {
 
     repositories {
         maven {
-            url '/Users/agessel/myo-android-sdk-0.6.0/myorepository'
+            url '/Users/agessel/myo-android-sdk-0.8.0/myorepository'
         }
 
-        compile('com.thalmic:myosdk:0.6.+@aar')
+        compile('com.thalmic:myosdk:0.8.+@aar')
         compile "com.android.support:appcompat-v7:21.0.0"
         compile 'com.android.support:recyclerview-v7:+'
     }
