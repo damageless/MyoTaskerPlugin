@@ -149,7 +149,7 @@ public class EditActivity extends ActionBarActivity {
 
     private enum Gesture {
         Fist(Pose.FIST, R.drawable.solid_blue_fist, R.string.fist),
-        DoubleTap(Pose.DOUBLE_TAP, R.drawable.solid_blue_pinky_thumb, R.string.double_tap),
+        DoubleTap(Pose.DOUBLE_TAP, R.drawable.solid_blue_double_tap, R.string.double_tap),
         WaveIn(Pose.WAVE_IN, R.drawable.solid_blue_wave_left, R.string.wave_in),
         WaveOut(Pose.WAVE_OUT, R.drawable.solid_blue_wave_right, R.string.wave_out),
         FingersSpread(Pose.FINGERS_SPREAD, R.drawable.solid_blue_spread_fingers, R.string.fingers_spread);
