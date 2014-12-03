@@ -27,7 +27,9 @@
     <string name="last_connected_to">Last connected to:</string>
     <string name="detached_myo">Detached Myo:</string>
     <string name="myo_tasker_plugin_welcome"><h1><b>Welcome to Myo Tasker Plugin!</b></h1>\n\nTo get started with your Myo, <b>touch your Myo to the phone and wait for the \'Myo connected\' message to appear</b>. Open up Tasker and add a new profile of the \'Event\' type. The plugin will show under the \'Plugins\' category as \'Add Myo Gesture\'.\n\n Myo gestures will only be recognized after you perform the unlock gesture (pinky-to-thumb). By default you have 5 seconds to perform your next gesture before you must use the unlock gesture again (this time is configurable in Settings.\n\n\nPlease contact the developer with any questions. Enjoy!</string>
-r
+    <string name="double_tap">Double Tap</string>
+    <string name="disconnect">Disconnect from Myo</string>
+    r
     <string-array name="relock_times">
         <item>1 second</item>
         <item>2 seconds</item>

@@ -49,7 +49,12 @@
         <service
             android:name="com.damageddev.myotaskerplugin.services.BackgroundService"
             android:exported="false"
-            android:process=":background" />
+            android:process=":background">
+            <intent-filter>
+                <action android:name="com.damageddev.myotaskerplugin.ACTION_DISCONNECT" />
+                <action android:name="com.damageddev.myotaskerplugin.ACTION_CONNECT" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name="com.damageddev.myotaskerplugin.SettingsActivity"
