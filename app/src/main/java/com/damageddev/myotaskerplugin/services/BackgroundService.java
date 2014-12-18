@@ -83,7 +83,6 @@ public final class BackgroundService extends Service {
 
         @Override
         public void onDisconnect(Myo myo, long timestamp) {
-            mHub.attachToAdjacentMyo();
 
             SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
 
@@ -148,6 +147,8 @@ public final class BackgroundService extends Service {
         @Override
         public void onDetach(Myo myo, long timestamp) {
             super.onDetach(myo, timestamp);
+
+            mHub.attachToAdjacentMyo();
 
             SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
 
